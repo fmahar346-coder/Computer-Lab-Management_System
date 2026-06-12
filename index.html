@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLMS - Computer Lab Management System</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Mermaid.js for Diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: 'dark',
+            securityLevel: 'loose',
+            themeVariables: {
+                background: '#12182b',
+                primaryColor: '#6366f1',
+                secondaryColor: '#06b6d4',
+                lineColor: '#4b5563',
+                textColor: '#f3f4f6'
+            }
+        });
+    </script>
+</head>
+<body>
+    <!-- Background Ambient Glow Blobs -->
+    <div class="glow-blob blob-1"></div>
+    <div class="glow-blob blob-2"></div>
+
+    <div class="app-container">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand-section">
+                <div class="brand-logo">
+                    <i class="fas fa-desktop"></i>
+                </div>
+                <div class="brand-name">
+                    COMPUTER LAB<br>
+                    <span style="font-size: 0.8rem; font-weight: 500; color: var(--text-muted);">MANAGEMENT SYSTEM</span>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <li class="nav-item active" id="nav-dashboard" onclick="switchView('dashboard')">
+                    <a class="nav-link"><i class="fas fa-chart-pie"></i> Overview</a>
+                </li>
+                <li class="nav-item" id="nav-cli" onclick="switchView('cli')">
+                    <a class="nav-link"><i class="fas fa-terminal"></i> Console Simulator</a>
+                </li>
+                <li class="nav-item" id="nav-gui" onclick="switchView('gui')">
+                    <a class="nav-link"><i class="fas fa-window-restore"></i> Modern GUI</a>
+                </li>
+                <li class="nav-item" id="nav-code" onclick="switchView('code')">
+                    <a class="nav-link"><i class="fas fa-code"></i> Code Explorer</a>
+                </li>
+                <li class="nav-item" id="nav-uml" onclick="switchView('uml')">
+                    <a class="nav-link"><i class="fas fa-project-diagram"></i> UML Diagrams</a>
+                </li>
+            </nav>
+
+            <div class="developer-card">
+                <div class="developer-card-title">Developed By</div>
+                <div class="developer-names">
+                    Fahad Mahar<br>
+                    Sabreena Asad
+                </div>
+            </div>
+
+            <!-- Theme Toggle Switch -->
+            <div class="theme-toggle-container">
+                <span class="theme-toggle-label"><i class="fas fa-sun-plant-wilt"></i> Light Mode</span>
+                <label class="switch">
+                    <input type="checkbox" id="theme-toggle-cb">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            
+            <!-- Header -->
+            <header class="top-header">
+                <h1 class="page-title" id="current-page-title">Lab System Dashboard</h1>
+                <div style="display: flex; gap: 1rem; align-items: center;">
+                    <button class="audio-toggle-btn" id="audio-toggle-btn" onclick="toggleAudio()">
+                        <i class="fas fa-volume-mute"></i> Audio Off
+                    </button>
+                    <div class="system-status">
+                        <span class="status-dot" id="header-session-dot"></span>
+                        <span id="header-session-text">Session: Inactive</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- 1. OVERVIEW VIEW (Dashboard) -->
+            <section class="tab-view active" id="view-dashboard">
+                <div class="dashboard-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon primary">
+                            <i class="fas fa-network-wired"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="stat-total-pcs">0</span>
+                            <span class="stat-label">Total PCs</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon success">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="stat-active-bookings">0</span>
+                            <span class="stat-label">Active Bookings</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon secondary">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="stat-reported-issues">0</span>
+                            <span class="stat-label">Reported Issues</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon accent">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value">Active</span>
+                            <span class="stat-label">Login System</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-panels-row">
+                    <!-- Project Details Card -->
+                    <div class="info-card">
+                        <h2 class="info-card-header">Project Overview</h2>
+                        <p style="color: var(--text-muted); line-height: 1.6; margin-bottom: 1.5rem;">
+                            The <strong>Computer Lab Management System (CLMS)</strong> is designed to coordinate operations inside a university computer lab. The C++ application manages PC tracking, student reservations, session logs, and issue reporting. The implementation models real-world business constraints using professional object-oriented programming (OOP) paradigms.
+                        </p>
+                        <div class="project-details-grid">
+                            <div class="detail-bubble">
+                                <div class="detail-bubble-title">Frontend Architecture</div>
+                                <div class="detail-bubble-content" style="color: var(--secondary);">Single-Page Web app</div>
+                            </div>
+                            <div class="detail-bubble">
+                                <div class="detail-bubble-title">C++ Logic Simulation</div>
+                                <div class="detail-bubble-content" style="color: var(--primary);">Interactive JS Engine</div>
+                            </div>
+                            <div class="detail-bubble">
+                                <div class="detail-bubble-title">Persistence Layer</div>
+                                <div class="detail-bubble-content" style="color: var(--success);">VFS via LocalStorage</div>
+                            </div>
+                            <div class="detail-bubble">
+                                <div class="detail-bubble-title">Development IDE</div>
+                                <div class="detail-bubble-content">Dev-C++ / GCC</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tech Stack Details -->
+                    <div class="info-card">
+                        <h2 class="info-card-header">C++ System Features</h2>
+                        <ul class="info-list">
+                            <li class="info-list-item">
+                                <span class="info-item-label">Encapsulation</span>
+                                <span class="badge badge-success">Implemented</span>
+                            </li>
+                            <li class="info-list-item">
+                                <span class="info-item-label">Inheritance</span>
+                                <span class="badge badge-success">Implemented</span>
+                            </li>
+                            <li class="info-list-item">
+                                <span class="info-item-label">Polymorphism</span>
+                                <span class="badge badge-success">Implemented</span>
+                            </li>
+                            <li class="info-list-item">
+                                <span class="info-item-label">File Handling</span>
+                                <span class="badge badge-primary">Active</span>
+                            </li>
+                            <li class="info-list-item">
+                                <span class="info-item-label">Terminal Colors</span>
+                                <span class="badge badge-primary">Windows API</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. CONSOLE EMULATOR VIEW (C++ CLI Simulator) -->
+            <section class="tab-view" id="view-cli">
+                <div style="margin-bottom: 1rem; color: var(--text-muted); font-size: 0.9rem;">
+                    <i class="fas fa-info-circle"></i> Authenticate using username <strong style="color: var(--text-main);">Fahad Mahar</strong> and password <strong style="color: var(--text-main);">2006</strong>.
+                </div>
+                <div class="cli-container">
+                    <div class="cli-header">
+                        <div class="cli-window-controls">
+                            <span class="cli-dot close"></span>
+                            <span class="cli-dot minimize"></span>
+                            <span class="cli-dot maximize"></span>
+                        </div>
+                        <span class="cli-window-title"><i class="fas fa-terminal"></i> Dev-C++ Compiled CLI Console Emulator</span>
+                        <div style="width: 50px;"></div>
+                    </div>
+                    <div class="cli-screen">
+                        <div class="cli-terminal" id="cli-terminal">
+                            <pre id="cli-history"></pre>
+                            <div class="cli-input-line">
+                                <span class="cli-prompt" id="cli-prompt-symbol">&gt;</span>
+                                <input type="text" class="cli-input" id="cli-input-field" autocomplete="off" autofocus>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. MODERN GUI VIEW -->
+            <section class="tab-view" id="view-gui">
+                <div class="gui-tabs">
+                    <button class="gui-tab-btn active" id="gui-tab-pc-mgt" onclick="ModernGUI.switchSubTab('pc-mgt')"><i class="fas fa-desktop"></i> PC Management</button>
+                    <button class="gui-tab-btn" id="gui-tab-booking" onclick="ModernGUI.switchSubTab('booking')"><i class="fas fa-book"></i> Bookings</button>
+                    <button class="gui-tab-btn" id="gui-tab-issues" onclick="ModernGUI.switchSubTab('issues')"><i class="fas fa-bug"></i> Issues</button>
+                    <button class="gui-tab-btn" id="gui-tab-files" onclick="ModernGUI.switchSubTab('files')"><i class="fas fa-database"></i> Database Files</button>
+                    <button class="gui-tab-btn" id="gui-tab-polymorphism" onclick="ModernGUI.switchSubTab('polymorphism')"><i class="fas fa-project-diagram"></i> Polymorphism Demo</button>
+                </div>
+
+                <div class="gui-content-container">
+                    <!-- GUI: PC Management -->
+                    <div class="gui-view active" id="gui-view-pc-mgt">
+                        <h3 style="margin-bottom: 1.5rem;"><i class="fas fa-desktop"></i> Register New Computer Node</h3>
+                        <form id="form-add-pc">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="input-pc-id">PC ID Number</label>
+                                    <input type="number" id="input-pc-id" class="form-control" placeholder="e.g. 105" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-pc-status">Status</label>
+                                    <select id="input-pc-status" class="form-control" required>
+                                        <option value="Active">Active</option>
+                                        <option value="Maintenance">Maintenance</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" style="justify-content: flex-end;">
+                                    <button type="submit" class="btn"><i class="fas fa-plus"></i> Save PC Node</button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <h3 style="margin-top: 2rem; margin-bottom: 1rem;"><i class="fas fa-table"></i> All Lab Computers</h3>
+                        <div class="table-container">
+                            <table class="custom-table">
+                                <thead>
+                                    <tr>
+                                        <th>PC Identification</th>
+                                        <th>Status Indicator</th>
+                                        <th>Administrative Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="gui-pc-table-body">
+                                    <!-- Dynamic PC Content -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- GUI: Booking -->
+                    <div class="gui-view" id="gui-view-booking">
+                        <h3 style="margin-bottom: 1.5rem;"><i class="fas fa-bookmark"></i> Allocate PC to Student</h3>
+                        <form id="form-book-pc">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="book-student-id">Student ID</label>
+                                    <input type="number" id="book-student-id" class="form-control" placeholder="e.g. 2005" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="book-pc-select">Available Computers</label>
+                                    <select id="book-pc-select" class="form-control" required>
+                                        <!-- Dynamic Dropdown options of PCs in 'Active' state -->
+                                    </select>
+                                </div>
+                                <div class="form-group" style="justify-content: flex-end;">
+                                    <button type="submit" class="btn"><i class="fas fa-check"></i> Book Computer</button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <h3 style="margin-top: 2rem; margin-bottom: 1rem;"><i class="fas fa-table"></i> Booking Logs</h3>
+                        <div class="table-container">
+                            <table class="custom-table">
+                                <thead>
+                                    <tr>
+                                        <th>Student User ID</th>
+                                        <th>Allocated Computer</th>
+                                        <th>Reservation Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="gui-booking-table-body">
+                                    <!-- Dynamic Bookings Content -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- GUI: Issues -->
+                    <div class="gui-view" id="gui-view-issues">
+                        <h3 style="margin-bottom: 1.5rem;"><i class="fas fa-bug"></i> File Incident Report</h3>
+                        <form id="form-report-issue">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="report-issue-id">Issue ID</label>
+                                    <input type="number" id="report-issue-id" class="form-control" placeholder="e.g. 1" required>
+                                </div>
+                                <div class="form-group" style="grid-column: span 2;">
+                                    <label for="report-issue-desc">Fault Description</label>
+                                    <input type="text" id="report-issue-desc" class="form-control" placeholder="e.g. Broken port, network failures" required>
+                                </div>
+                                <div class="form-group" style="justify-content: flex-end;">
+                                    <button type="submit" class="btn btn-danger"><i class="fas fa-flag"></i> Submit Issue</button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <h3 style="margin-top: 2rem; margin-bottom: 1rem;"><i class="fas fa-table"></i> Incident Reports</h3>
+                        <div class="table-container">
+                            <table class="custom-table">
+                                <thead>
+                                    <tr>
+                                        <th>Fault Reference #</th>
+                                        <th>Description</th>
+                                        <th>Status Badge</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="gui-issue-table-body">
+                                    <!-- Dynamic Issues Content -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- GUI: Live File Manager -->
+                    <div class="gui-view" id="gui-view-files">
+                        <h3 style="margin-bottom: 1.5rem;"><i class="fas fa-folder-open"></i> Live Virtual File Database</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; margin-bottom: 1.5rem;">
+                            This interface allows you to view and directly edit the simulated text files utilized by the C++ file handling mechanisms (via <code>localStorage</code>). Saving changes here will instantly update the C++ Simulator and GUI.
+                        </p>
+                        <div class="file-editor-grid">
+                            <ul class="editor-file-list">
+                                <li class="editor-file-item active" id="editor-tab-pc_data" onclick="FileManager.openFile('pc_data.txt')"><i class="fas fa-file-alt"></i> pc_data.txt</li>
+                                <li class="editor-file-item" id="editor-tab-booking" onclick="FileManager.openFile('booking.txt')"><i class="fas fa-file-alt"></i> booking.txt</li>
+                                <li class="editor-file-item" id="editor-tab-issues" onclick="FileManager.openFile('issues.txt')"><i class="fas fa-file-alt"></i> issues.txt</li>
+                                <li class="editor-file-item" id="editor-tab-session" onclick="FileManager.openFile('session.txt')"><i class="fas fa-file-alt"></i> session.txt</li>
+                            </ul>
+                            <div class="editor-workspace">
+                                <textarea id="editor-textarea" class="editor-textarea" spellcheck="false"></textarea>
+                                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                                    <button class="btn btn-secondary" onclick="FileManager.downloadFile()"><i class="fas fa-download"></i> Download File</button>
+                                    <button class="btn" onclick="FileManager.saveFile()"><i class="fas fa-save"></i> Save Database File</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- GUI: Polymorphism Demo -->
+                    <div class="gui-view" id="gui-view-polymorphism">
+                        <h3 style="margin-bottom: 1rem;"><i class="fas fa-random"></i> C++ Polymorphism Step-by-Step Simulator</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; margin-bottom: 1.5rem;">
+                            C++ virtual functions resolve methods dynamically at runtime. Watch how a base class pointer <code>User* ptr</code> addresses a concrete object in the heap memory, looks up the Virtual Table (VTable), and binds the correct override function.
+                        </p>
+
+                        <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+                            <button id="demo-btn-admin" class="gui-tab-btn active" onclick="ModernGUI.setDemoType('admin')"><i class="fas fa-shield-halved"></i> Admin Context (User* ptr = new Admin())</button>
+                            <button id="demo-btn-student" class="gui-tab-btn" onclick="ModernGUI.setDemoType('student')"><i class="fas fa-graduation-cap"></i> Student Context (User* ptr = new Student())</button>
+                        </div>
+
+                        <!-- Stepper Visualizer -->
+                        <div class="stepper-container">
+                            <div class="stepper-header">
+                                <span class="step-desc" id="stepper-step-desc">Step 1: Declare Base Pointer (User* ptr)</span>
+                                <div class="stepper-steps-track">
+                                    <span class="step-indicator active" id="step-ind-1">1</span>
+                                    <span class="step-indicator" id="step-ind-2">2</span>
+                                    <span class="step-indicator" id="step-ind-3">3</span>
+                                    <span class="step-indicator" id="step-ind-4">4</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Stepper Graphic Area -->
+                            <div class="stepper-visual-area">
+                                <!-- Base Pointer Box -->
+                                <div class="visual-box" id="visual-ptr-box">
+                                    <div style="font-weight:700; color:var(--primary); margin-bottom:0.25rem;">Stack Memory</div>
+                                    <div style="font-size: 0.75rem; color:var(--text-muted);">User* ptr</div>
+                                    <div id="visual-ptr-value" style="font-size:0.85rem; font-weight:700; color:var(--text-main); margin-top:0.25rem;">0x00000000</div>
+                                </div>
+
+                                <!-- Pointer arrow -->
+                                <div class="visual-pointer-arrow" id="visual-arrow"></div>
+
+                                <!-- Heap Object Box -->
+                                <div class="visual-box" id="visual-heap-box" style="opacity: 0.3;">
+                                    <div style="font-weight:700; color:var(--secondary); margin-bottom:0.25rem;">Heap Memory</div>
+                                    <div id="visual-heap-type" style="font-size: 0.75rem; color:var(--text-muted);">Empty Heap Block</div>
+                                    <div id="visual-heap-fields" style="font-size:0.75rem; text-align:left; margin-top:0.4rem; color:var(--text-muted); line-height:1.4;">
+                                        (No instantiated object)
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Stepper Console / Explanation Area -->
+                            <div class="detail-bubble" id="stepper-explanation-bubble" style="border-left: 4px solid var(--primary); background-color: rgba(255,255,255,0.01); font-size:0.85rem; line-height:1.6;">
+                                Pointer <code>ptr</code> of base class type <code>User*</code> is allocated on the Stack. It currently points to <code>NULL</code> (0x00000000) and contains no address references.
+                            </div>
+
+                            <div class="stepper-actions">
+                                <button class="btn btn-secondary" id="stepper-prev-btn" onclick="ModernGUI.prevStep()"><i class="fas fa-chevron-left"></i> Previous Step</button>
+                                <button class="btn" id="stepper-next-btn" onclick="ModernGUI.nextStep()">Next Step <i class="fas fa-chevron-right"></i></button>
+                            </div>
+                        </div>
+
+                        <h4 style="margin-top: 1rem; margin-bottom: 0.75rem;"><i class="fas fa-terminal"></i> Console Output Screen</h4>
+                        <div id="polymorphism-output-result">
+                            <!-- Console output shows up at Step 4 -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. CODE EXPLORER VIEW -->
+            <section class="tab-view" id="view-code">
+                <div class="code-explorer-container">
+                    
+                    <!-- File Navigation Tree -->
+                    <nav class="file-tree">
+                        <div class="code-search-container">
+                            <input type="text" id="code-search-input" class="code-search-input" placeholder="🔍 Search codebase..." oninput="CodeExplorer.handleSearch(this.value)">
+                        </div>
+                        <div>
+                            <div class="file-tree-group-title">Headers (.h)</div>
+                            <ul class="file-tree-list" id="tree-headers"></ul>
+                        </div>
+                        <div>
+                            <div class="file-tree-group-title">Source Files (.cpp)</div>
+                            <ul class="file-tree-list" id="tree-sources"></ul>
+                        </div>
+                    </nav>
+
+                    <!-- Code Viewer Panel -->
+                    <div class="code-viewer">
+                        <div class="code-viewer-header">
+                            <span class="code-file-name" id="viewer-file-name">main.cpp</span>
+                            <button class="btn btn-secondary" id="code-copy-btn" onclick="CodeExplorer.copyCode()" style="padding: 0.4rem 0.85rem; font-size: 0.8rem;">
+                                <i class="fas fa-copy"></i> Copy File Content
+                            </button>
+                        </div>
+                        <div class="code-content-wrapper">
+                            <pre class="line-numbers" id="code-line-numbers"></pre>
+                            <code class="code-code" id="code-view-container"></code>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. UML DIAGRAMS VIEW -->
+            <section class="tab-view" id="view-uml">
+                <div class="uml-panels">
+                    
+                    <!-- Class Diagram Card -->
+                    <div class="uml-card">
+                        <h2 class="uml-card-title"><i class="fas fa-object-group"></i> Class Diagram ("grp")</h2>
+                        <div style="width: 100%; color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">
+                            Illustrates the object-oriented structure of CLMS, including the inheritance tree where <strong>Admin</strong> and <strong>Student</strong> derive from <strong>User</strong>, and associations for management classes.
+                        </div>
+                        <div class="uml-diagram-container">
+                            <div class="mermaid">
+classDiagram
+    class User {
+        #int userID
+        #string name
+        #string role
+        +User()
+        +inputUser() void
+        +displayUser()* void
+    }
+    class Admin {
+        -string department
+        +inputAdmin() void
+        +displayUser() void
+    }
+    class Student {
+        -string course
+        +inputStudent() void
+        +displayUser() void
+    }
+    class PC {
+        -int pcID
+        -string status
+        +inputPC() void
+        +displayPC() void
+        +savePCToFile() void
+        +viewAllPCs() void
+        +searchPC() void
+        +updatePC() void
+        +deletePC() void
+    }
+    class Booking {
+        -int studentID
+        -int pcID
+        +bookPC() void
+        +viewBookings() void
+    }
+    class Issue {
+        -int issueID
+        -string description
+        +reportIssue() void
+        +viewIssues() void
+    }
+    class Session {
+        +startSession() void
+        +endSession() void
+    }
+    class Login {
+        +authenticate() bool
+    }
+    class Dashboard {
+        +displayDashboard() void
+    }
+
+    User &lt;|-- Admin : Inheritance
+    User &lt;|-- Student : Inheritance
+    main ..&gt; User : Uses ptr
+    main ..&gt; PC : Manages
+    main ..&gt; Booking : Manages
+    main ..&gt; Issue : Manages
+    main ..&gt; Session : Session Manager
+    main ..&gt; Login : Authentication Gate
+    main ..&gt; Dashboard : Info Dashboard
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sequence Diagram Card -->
+                    <div class="uml-card">
+                        <h2 class="uml-card-title"><i class="fas fa-exchange-alt"></i> Sequence Diagram ("sequence")</h2>
+                        <div style="width: 100%; color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">
+                            Traces the timeline of operations: from authentication validation to session starting, executing the booking operation (storing records in text files), and ending the session.
+                        </div>
+                        <div class="uml-diagram-container">
+                            <div class="mermaid">
+sequenceDiagram
+    autonumber
+    actor User as Lab Operator
+    participant M as main() Loop
+    participant L as Login Class
+    participant S as Session Class
+    participant B as Booking Class
+    participant F as Filesystem (VFS)
+
+    User-&gt;&gt;M: Launch Application
+    M-&gt;&gt;L: authenticate()
+    L-&gt;&gt;User: Prompt Credentials (Username, Password)
+    User-&gt;&gt;L: Enter "Fahad Mahar" / "2006"
+    alt Authentication Valid
+        L--&gt;&gt;M: return true
+    else Invalid Credentials
+        L--&gt;&gt;M: return false &amp; terminate
+    end
+
+    M-&gt;&gt;S: startSession()
+    S-&gt;&gt;F: Write "Session Started" to session.txt
+    
+    loop Operation Menu Loop
+        M-&gt;&gt;User: Display System Menu (Option 1-15)
+        User-&gt;&gt;M: Input Choice 11 (Book PC)
+        M-&gt;&gt;B: bookPC()
+        B-&gt;&gt;User: Enter Student ID &amp; PC ID
+        User-&gt;&gt;B: Submit values (e.g. 2001, 104)
+        B-&gt;&gt;F: Append "2001 104" to booking.txt
+        B--&gt;&gt;User: Display "Booking Successful!"
+    end
+
+    User-&gt;&gt;M: Input Choice 15 (Exit)
+    M-&gt;&gt;S: endSession()
+    S-&gt;&gt;F: Write "Session Ended" to session.txt
+    M--&gt;&gt;User: Print "Exiting Program..."
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Code Explorer Database -->
+    <script src="codebase.js"></script>
+    <!-- Core Application Logic -->
+    <script src="app.js"></script>
+</body>
+</html>
